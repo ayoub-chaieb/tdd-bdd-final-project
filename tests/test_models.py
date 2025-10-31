@@ -150,3 +150,87 @@ class TestProductModel(unittest.TestCase):
         # Assert that the fetched product has the updated description.        
         self.assertEqual(updated_product.name, product.name)
         self.assertEqual(updated_product.description, new_description)
+
+    def test_delete_a_product(self):
+        """It should Delete a product"""
+        product = ProductFactory()
+        product.create()
+        # Assert  if the length of the list returned by Product.all() is equal to 1, to verify that after creating a product and saving it to the database, there is only one product in the system.
+        self.assertEqual(len(Product.all()), 1)
+        # Call the delete() method on the product object, to remove the product from the database.
+        product.delete()
+        # Assert if the length of the list returned by Product.all() is now equal to 0, indicating that the product has been successfully deleted from the database.
+        self.assertEqual(len(Product.all()), 0)
+        
+    def test_list_allll_produsct(self):
+        """It should List all products"""
+        # Assert if the products list is empty, indicating that there are no products in the database at the beginning of the test case.
+        self.assertEqual(len(Product.all()), 0)
+        # Use for loop to create five Product objects using a ProductFactory() and call the create() method on each product to save them to the database.
+        for _ in range(5):
+            product = ProductFactory()
+            product.create()
+        # Fetch all products from the database again using product.all()
+        products = Product.all()
+        # Assert if the length of the products list is equal to 5, to verify that the five products created in the previous step have been successfully added to the database.
+        self.assertEqual(len(products), 5)
+
+    def test_find_a_product_by_name(self):
+        """It should find a product by name"""
+        # Use for loop to create five Product objects using a ProductFactory() and call the create() method on each product to save them to the database.
+        for _ in range(5):
+            product = ProductFactory()
+            product.create()
+        # Fetch all products from the database again using product.all()
+        products = Product.all()
+        name = products[0].name
+        # Use a list comprehension to filter the products based on their name and then use len() to calculate the length of the filtered list, and use the variable called count to hold the number of products that match the name.
+        count = 0
+        for product in products:
+            if product.name == name:
+                count+=1
+        # Call the find_by_name() method on the Product class to retrieve products from the database that have the specified name.
+        found = Product.find_by_name(name)
+        # Assert if the count of the found products matches the expected count.
+        self.assertEqual(found.count(), count)
+        # Use a for loop to iterate over the found products and assert that each product's name matches the expected name, to ensure that all the retrieved products have the correct name.
+        for product in found:
+            self.assertEqual(product.name, name)
+
+    def test_find_a_product_availability(self):
+        """It should find a product by availbility"""
+        # Use a for loop to iterate over the products list and call the create() method on each product to save them to the database.
+        for _ in range(10):
+            product = ProductFactory()
+            product.create()
+        # Retrieve the availability of the first product in the products list.
+        products = Product.all()
+        available = products[0].available
+        # Use a list comprehension to filter the products based on their availability and then use len() to calculate the length of the filtered list, and use the variable called count to hold the number of products that have the specified availability.
+        count = len([product for product in products if product.available == available])
+        # Call the find_by_availability() method on the Product class to retrieve products from the database that have the specified availability.
+        found = Product.find_by_availability(available)
+        # Assert if the count of the found products matches the expected count.
+        self.assertEqual(found.count(), count)
+        # Use a for loop to iterate over the found products and assert that each product's availability matches the expected availability, to ensure that all the retrieved products have the correct availability.
+        for product in found:
+            self.assertEqual(product.available, available)
+
+    def test_find_a_product_category(self):
+        """It should find a product by category"""
+        # Use a for loop to iterate over the products list and call the create() method on each product to save them to the database.
+        for _ in range(10):
+            product = ProductFactory()
+            product.create()
+        # Retrieve the category of the first product in the products list.
+        products = Product.all()
+        category = products[0].category
+        # Use a list comprehension to filter the products based on their category and then use len() to calculate the length of the filtered list, and use the variable called count to hold the number of products that have the specified category.
+        count = len([product for product in products if product.category == category])
+        # Call the find_by_category() method on the Product class to retrieve products from the database that have the specified category.
+        found = Product.find_by_category(category)
+        # Assert if the count of the found products matches the expected count.
+        self.assertEqual(found.count(), count)
+        # Use a for loop to iterate over the found products and assert that each product's availability matches the expected category, to ensure that all the retrieved products have the correct category.
+        for product in found:
+            self.assertEqual(product.category, category)
