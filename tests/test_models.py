@@ -104,3 +104,49 @@ class TestProductModel(unittest.TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
+    def test_read_a_product(self):
+        """It should read a product"""
+        product = ProductFactory()
+        # Set the ID of the product object to None and then call the create() method on the product.
+        product.id = None
+        product.create()
+        # Assert that the ID of the product object is not None after calling the create() method.
+        self.assertIsNotNone(product.id)
+        # Fetch the product back from the system using the product ID and store it in found_product
+        found_product = Product.find(product.id)
+        # Assert that the properties of the found_product match with the properties of the original product object, such as id, name, description and price.
+        self.assertEqual(found_product.name, product.name)
+        self.assertEqual(found_product.description, product.description)
+        self.assertEqual(found_product.price, product.price)
+        self.assertEqual(found_product.available, product.available)
+        self.assertEqual(found_product.category, product.category)
+
+    def test_update_a_product(self):
+        """It should Update a product"""
+        product = ProductFactory()
+        # Set the ID of the product object to None and then call the create() method on the product.
+        product.id = None
+        product.create()
+        # Log the product object again after it has been created to verify that the product was created with the desired properties.
+        self.assertEqual(str(product), f"<Product {product.name} id=[{product.id}]>")
+        # Assert that the ID of the product object is not None after calling the create() method.
+        self.assertTrue(product is not None)
+        self.assertIsNotNone(product.id)
+        # Update the product in the system with the new property values using the update() method.
+        new_description = "Full of Fibers and Vitamin A"
+        product.description = new_description
+        original_id = product.id
+        product.update()
+        # Assert that the id is same as the original id but description property of the product object has been updated correctly after calling the update() method.
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.description, new_description)
+        # Fetch all the product back from the system.
+        products = Product.all()
+        # Assert the length of the products list is equal to 1 to verify that after updating the product, there is only one product in the system.
+        self.assertEqual(len(products), 1)
+        updated_product = products[0]
+        # Assert that the fetched product has id same as the original id.
+        self.assertEqual(updated_product.id, original_id)
+        # Assert that the fetched product has the updated description.        
+        self.assertEqual(updated_product.name, product.name)
+        self.assertEqual(updated_product.description, new_description)
