@@ -30,6 +30,7 @@ from decimal import Decimal
 from service.models import Product, Category, db
 from service import app
 from tests.factories import ProductFactory
+from service.models import DataValidationError
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -151,6 +152,12 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(updated_product.name, product.name)
         self.assertEqual(updated_product.description, new_description)
 
+    def test_update_product_without_id_raises_error(self):
+        product = ProductFactory()
+        product.id = None
+        product.description = "What is love?"
+        self.assertRaises(DataValidationError, product.update)
+        
     def test_delete_a_product(self):
         """It should Delete a product"""
         product = ProductFactory()
@@ -162,7 +169,7 @@ class TestProductModel(unittest.TestCase):
         # Assert if the length of the list returned by Product.all() is now equal to 0, indicating that the product has been successfully deleted from the database.
         self.assertEqual(len(Product.all()), 0)
         
-    def test_list_allll_produsct(self):
+    def test_list_all_produsct(self):
         """It should List all products"""
         # Assert if the products list is empty, indicating that there are no products in the database at the beginning of the test case.
         self.assertEqual(len(Product.all()), 0)
