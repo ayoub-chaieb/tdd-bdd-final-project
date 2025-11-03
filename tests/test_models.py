@@ -241,3 +241,42 @@ class TestProductModel(unittest.TestCase):
         # Use a for loop to iterate over the found products and assert that each product's availability matches the expected category, to ensure that all the retrieved products have the correct category.
         for product in found:
             self.assertEqual(product.category, category)
+
+    def test_serialize(self):
+        """ Test product to dict """
+        product = ProductFactory()
+        result = product.serialize()
+        self.assertEqual(product.name, result["name"])
+        self.assertEqual(product.description, result["description"])
+        self.assertEqual(product.price, Decimal(result["price"]))
+        self.assertEqual(product.available, result["available"])
+        self.assertEqual(product.category.name, result["category"])
+
+    def test_deserialize(self):
+        """ Test product from dict """
+        data = ProductFactory().serialize()
+        product = Product()
+        product.deserialize(data)
+        self.assertEqual(product.name, data["name"])
+        self.assertEqual(product.description, data["description"])
+        self.assertEqual(product.price, Decimal(data["price"]))
+        self.assertEqual(product.available, data["available"])
+        self.assertEqual(product.category.name, data["category"])
+
+    def test_deserialize_without_available_raises_error(self):
+        data = ProductFactory().serialize()
+        data["available"] = "Not A Bool"
+        product = Product()
+        self.assertRaises(DataValidationError, product.deserialize, data)
+        bad_data = {
+            "name": "Test Product",
+            "description": "Some description",
+            "price": 10.0,
+            "available": True,
+            "category": "UNKNOWN",
+            "invalid_field": "some value"  # This should cause AttributeError
+        }
+        self.assertRaises(DataValidationError, product.deserialize, bad_data)
+        bad_data = None
+        self.assertRaises(DataValidationError, product.deserialize, bad_data)
+        # finish this
