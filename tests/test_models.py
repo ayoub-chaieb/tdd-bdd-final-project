@@ -271,3 +271,29 @@ class TestProductModel(unittest.TestCase):
         bad_data = None
         self.assertRaises(DataValidationError, product.deserialize, bad_data)
 
+    def test_find_by_price(self):
+        """It should find a product by price"""
+        # Use a for loop to iterate over the products list and call the create() method on each product to save them to the database.
+        for _ in range(10):
+            product = ProductFactory()
+            product.create()
+        # Retrieve the price of the first product in the products list.
+        products = Product.all()
+        price = products[0].price
+        # Use a list comprehension to filter the products based on their category and then use len() to calculate the length of the filtered list, and use the variable called count to hold the number of products that have the specified price.
+        count = len([product for product in products if product.price == price])
+        # Call the find_by_price() method on the Product class to retrieve products from the database that have the specified price.
+        found = Product.find_by_price(price)
+        # Assert if the count of the found products matches the expected count.
+        self.assertEqual(found.count(), count)
+        # Use a for loop to iterate over the found products and assert that each product's price matches the expected price, to ensure that all the retrieved products have the correct price.
+        for product in found:
+            self.assertEqual(product.price, price)
+
+    def test_find_by_price_decimal_conversion(self):
+        """It should find a product by price string converted to decimal"""
+        product = ProductFactory()
+        product.price = "3.14"
+        product.create()
+        found = Product.find_by_price("3.14")
+        self.assertEqual(found[0].price, Decimal("3.14"))
