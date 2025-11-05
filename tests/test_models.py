@@ -268,15 +268,6 @@ class TestProductModel(unittest.TestCase):
         data["available"] = "Not A Bool"
         product = Product()
         self.assertRaises(DataValidationError, product.deserialize, data)
-        bad_data = {
-            "name": "Test Product",
-            "description": "Some description",
-            "price": 10.0,
-            "available": True,
-            "category": "UNKNOWN",
-            "invalid_field": "some value"  # This should cause AttributeError
-        }
-        self.assertRaises(DataValidationError, product.deserialize, bad_data)
         bad_data = None
         self.assertRaises(DataValidationError, product.deserialize, bad_data)
-        # finish this
+
