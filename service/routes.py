@@ -124,10 +124,22 @@ def get_products(product_id):
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
-
-#
-# PLACE YOUR CODE TO UPDATE A PRODUCT HERE
-#
+@app.route("/products/<int:id>", methods=["PUT"])
+def update_product(id):
+    """
+    Update a Product
+    This endpoint will update a Product based on the posted data
+    """
+    app.logger.info("Request to update an Product with id: %s", id)
+    product = Product.find(id)
+    if not product:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Account with id [{id}] could not be found."
+        )
+    product.deserialize(request.get_json())
+    product.update()
+    return product.serialize(), status.HTTP_200_OK
 
 ######################################################################
 # D E L E T E   A   P R O D U C T
