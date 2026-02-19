@@ -192,7 +192,7 @@ class TestProductRoutes(TestCase):
         response = self.client.put(f"{BASE_URL}/{new_product['id']}", json=new_product)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_product = response.get_json()
-        self.assertEqual(new_product["description"], "unknown")
+        self.assertEqual(updated_product["description"], "unknown")
 
     def test_get_product_list(self):
         """It should Get a list of Products"""
@@ -213,7 +213,7 @@ class TestProductRoutes(TestCase):
         test_product = products[0]
         response = self.client.delete(f"{BASE_URL}/{test_product.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(len(response.data), 0) 
+        self.assertEqual(len(response.data), 0)
         response = self.client.get(f"{BASE_URL}/{test_product.id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         new_count = self.get_product_count()

@@ -106,10 +106,11 @@ def list_products():
     products = Product.all()
     # create a list of serialize() products
     results = [product.serialize() for product in products]
-    # log the number of products being returned in the list 
+    # log the number of products being returned in the list
     app.logger.info("[%s] Products returned", len(results))
     # return the list with a return code of status.HTTP_200_OK
     return results, status.HTTP_200_OK
+
 
 ######################################################################
 # R E A D   A   P R O D U C T
@@ -130,25 +131,27 @@ def get_products(product_id):
     app.logger.info("Returning product: %s", product.name)
     return product.serialize(), status.HTTP_200_OK
 
+
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
 @app.route("/products/<int:id>", methods=["PUT"])
-def update_product(id):
+def update_product(product_id):
     """
     Update a Product
     This endpoint will update a Product based on the posted data
     """
-    app.logger.info("Request to update an Product with id: %s", id)
-    product = Product.find(id)
+    app.logger.info("Request to update an Product with id: %s", product_id)
+    product = Product.find(product_id)
     if not product:
         abort(
             status.HTTP_404_NOT_FOUND,
-            f"Account with id [{id}] could not be found."
+            f"Account with id [{product_id}] could not be found."
         )
     product.deserialize(request.get_json())
     product.update()
     return product.serialize(), status.HTTP_200_OK
+
 
 ######################################################################
 # D E L E T E   A   P R O D U C T
