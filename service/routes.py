@@ -101,14 +101,19 @@ def create_products():
 def list_products():
     """Returns a list of Products"""
     app.logger.info("Request to list Products...")
+    
+    # Initialize an empty list to hold the products.
+    products = []
+    # Get the `name` parameter from the request (hint: use `request.args.get()`
+    name = request.args.get('name')    
+    # test to see if you received the "name" query parameter
+    if name:
+        products = Product.query.filter(Product.name == name).all()
+    else:
+        products = Product.query.all()
 
-    # use the Product.all() method to retrieve all products
-    products = Product.all()
-    # create a list of serialize() products
     results = [product.serialize() for product in products]
-    # log the number of products being returned in the list
     app.logger.info("[%s] Products returned", len(results))
-    # return the list with a return code of status.HTTP_200_OK
     return results, status.HTTP_200_OK
 
 
