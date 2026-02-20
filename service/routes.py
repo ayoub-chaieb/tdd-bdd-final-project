@@ -135,7 +135,7 @@ def get_products(product_id):
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
-@app.route("/products/<int:id>", methods=["PUT"])
+@app.route("/products/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
     """
     Update a Product
