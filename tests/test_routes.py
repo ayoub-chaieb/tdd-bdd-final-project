@@ -198,13 +198,9 @@ class TestProductRoutes(TestCase):
     def test_get_product_list(self):
         """It should Get a list of Products"""
         self._create_products(5)
-        # send a self.client.get() request to the BASE_URL
         response = self.client.get(BASE_URL)
-        # assert that the resp.status_code is status.HTTP_200_OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # get the data from resp.get_json()
         data = response.get_json()
-        # assert that the len() of the data is 5 (the number of products you created)
         self.assertEqual(len(data), 5)
 
     def test_delete_product(self):
@@ -224,7 +220,7 @@ class TestProductRoutes(TestCase):
         """It should Query Products by name"""
         products = self._create_products(5)
         test_name = products[0].name
-        count = len([product for product in products if product.name == test_name])        
+        count = len([product for product in products if product.name == test_name])
         response = self.client.get(BASE_URL, query_string=f"name={quote_plus(test_name)}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
@@ -233,6 +229,19 @@ class TestProductRoutes(TestCase):
         for product in data:
             self.assertEqual(product["name"], test_name)
 
+    def test_query_by_category(self):
+        """It should Query Products by category"""
+        products = self._create_products(10)
+        category = products[0].category
+        found = [product for product in products if product.category == category]
+        found_count = len(found)
+        logging.debug("Found Products [%d] %s", found_count, found)
+        response = self.client.get(BASE_URL, query_string=f"name={quote_plus(category)}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), found_count)
+        for product in data:
+            self.assertEqual(product["category"], category)
 
     ######################################################################
     # Utility functions
