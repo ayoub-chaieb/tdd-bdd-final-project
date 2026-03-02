@@ -50,3 +50,6 @@ def step_impl(context):
         #
         # ADD YOUR CODE HERE TO CREATE PRODUCTS VIA THE REST API
         #
+        # create payload to include product's name, description, price, availability, category.
+        # send a POST request to the REST endpoint.
+        # assert that the HTTP status code of the response is equal to 201.
