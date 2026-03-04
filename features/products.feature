@@ -92,3 +92,14 @@ Scenario: Delete a Product
     When I press the "Clear" button
     And I press "Search" button
     Then I should see the message "Success"
+
+Scenario: List all products
+    When I visit the "Home Page"
+    And ...
+    And I press the "Clear" button
+    And I press "Search" button
+    Then I should see the message "Success"
+    And I should see "Hat" in the "Name" field
+    And I should see "Shoes" in the "Name" field
+    And I should see "Big Mac" in the "Name" field
+    And I should see "Sheets" in the "Name" field
