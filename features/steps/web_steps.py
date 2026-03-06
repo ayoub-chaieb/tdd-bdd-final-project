@@ -114,9 +114,6 @@ def step_impl(context, element_name):
 
 @then('I should see the message "{message}"')
 def step_impl(context, message):
-    # Use WebDriverWait to wait for the specified message to be present in the element with the ID 'flash_message'
-    # Use the expected_conditions.text_to_be_present_in_element method to check if the provided message is present in the text content of the element.
-    # Use the assert(found) statement to verify that the message was found in the flash message area.
     found = WebDriverWait(context.driver, context.wait_seconds).until(
         expected_conditions.text_to_be_present_in_element(
             (By.ID, 'flash_message'), message
