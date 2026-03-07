@@ -74,7 +74,7 @@ Scenario: Update a Product
     When I press the "Clear" button
     And I press the "Search" button
     Then I should see the message "Success"
-    And I should see "Cap" in the "Name" field
+    And I should see "Cap" in the results
     And I should not see "Hat" in the results
 
 Scenario: Delete a Product
@@ -98,10 +98,10 @@ Scenario: List all products
     And I press the "Clear" button
     And I press the "Search" button
     Then I should see the message "Success"
-    And I should see "Hat" in the "Name" field
-    And I should see "Shoes" in the "Name" field
-    And I should see "Big Mac" in the "Name" field
-    And I should see "Sheets" in the "Name" field
+    And I should see "Hat" in the results
+    And I should see "Shoes" in the results
+    And I should see "Big Mac" in the results
+    And I should see "Sheets" in the results
 
 Scenario: Search by category
     When I visit the "Home Page"
