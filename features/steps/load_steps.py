@@ -54,8 +54,8 @@ def step_impl(context):
             "name": row['name'],
             "description": row['description'],
             "price": row['price'],
-            "available": row['available'] in ['True', 'true', '1'],
+            "available": row['available'].lower() in ['true', '1'],
             "category": row['category'],
         }
-        response = requests.post(f"{context.base_url}/pets", json=payload)
+        context.response = requests.post(rest_endpoint, json=payload)
         assert(context.response.status_code == HTTP_201_CREATED)
